@@ -15,23 +15,36 @@ model.setInputScale(1.0/127.5)
 model.setInputMean(127.5)
 model.setInputSwapRB(True)
 
-img = cv2.imread(r"C:\Users\dell\Desktop\machine learning\Object Detection\ic3.jpg")
-plt.imshow(img)
-plt.imshow(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
+class image_classifier:
+    def __init__(self,p):
+        self.path = p
+        
+    def classify(self):
+        tags=""
+        img = cv2.imread(self.path)
+#         plt.imshow(img)
+#         plt.imshow(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
 
-ClassIndex, confidence, bbox = model.detect(img, confThreshold=0.5)
-print(ClassIndex)
+        ClassIndex, confidence, bbox = model.detect(img, confThreshold=0.5)
+#         print(ClassIndex)
 
-font_scale = 3
-font = cv2.FONT_HERSHEY_SIMPLEX
-for ClassInd, conf, boxes in zip(ClassIndex.flatten(), confidence.flatten(), bbox):
+        font_scale = 3
+        font = cv2.FONT_HERSHEY_SIMPLEX
+        for ClassInd, conf, boxes in zip(ClassIndex.flatten(), confidence.flatten(), bbox):
+                    if(ClassInd<=80):
+                        cv2.rectangle(img,boxes,(255, 0, 0), 2 )
+                        cv2.putText(img,classLabels[ClassInd-1],(boxes[0]+10,boxes[1]+40), font, fontScale=font_scale,color=(0,255,0),thickness=3)
+
+
+#         plt.imshow(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
+
+        for ClassInd, conf, boxes in zip(set(ClassIndex.flatten()), confidence.flatten(), bbox):
             if(ClassInd<=80):
-                cv2.rectangle(img,boxes,(255, 0, 0), 2 )
-                cv2.putText(img,classLabels[ClassInd-1],(boxes[0]+10,boxes[1]+40), font, fontScale=font_scale,color=(0,255,0),thickness=3)
+                tags = classLabels[ClassInd-1] 
+                print((classLabels[ClassInd-1]))
+#                 print(type(tags))
+        return tags
 
-
-plt.imshow(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
-
-for ClassInd, conf, boxes in zip(set(ClassIndex.flatten()), confidence.flatten(), bbox):
-    if(ClassInd<=80):
-        print((classLabels[ClassInd-1]))
+# if __name__ == "__main__":
+#     c=image_classifier("C:\\Users\\dell\\Desktop\\machine learning\\Object Detection\\ic2.jpg")
+#     c.classify()
