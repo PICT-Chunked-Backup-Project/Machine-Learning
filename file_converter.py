@@ -25,6 +25,10 @@ class fileConverter:
                 fullText.append(para.text)
                 text = '\n'.join(fullText)
                 print(text)
+        elif self.path.endswith(".txt"):
+            with open(self.path,encoding='utf-8') as f:
+                text=f.readlines()
+            print(text)
         elif self.path.endswith(".pdf"):
             pdfFileObj = open(self.path, 'rb')
             pdfReader = PyPDF2.PdfFileReader(pdfFileObj, strict=False)
