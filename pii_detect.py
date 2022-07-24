@@ -140,6 +140,7 @@ def match_query_21(text0, query_all):#this function is the main one and is calle
 
 query_all1 = "credit card AND bank account AND social security AND license AND email AND aadhar AND uid AND pan AND government of India AND passsport AND income tax AND property papers AND debit card AND transaction AND insurance AND ifsc AND SSN AND address AND law AND legal AND minority AND caste AND reserved category AND postal address AND medical records AND identification AND date of birth AND ip address AND health AND authority AND organization AND data protection AND admission"
 
+#match_query_21(docs,query_all1)
 #call match_query_21 and dont remove query_all1
 
 
