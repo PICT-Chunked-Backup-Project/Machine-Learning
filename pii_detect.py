@@ -12,8 +12,8 @@ bert = KeyBERT()
 embedder = SentenceTransformer('all-MiniLM-L6-v2')
 
 df = pd.read_csv('C:/Users/adity/Downloads/Tags2.csv',
-                 sep=',', engine='python')
-print(df)
+                 sep=',', engine='python')#enter the path of the tags file manually
+#print(df)
 
 dict_risk_cats_ = {}
 for i in range(len(df)):
@@ -64,26 +64,16 @@ def keybert_extractor(text, gram1, gram2, top_res):
 
 
 # a method to generate the corpus of the doc given as input to our match_query(test category)
-def corpus_generator(input_filepath):
+def corpus_generator(text0):
     #to it's specific keyword.
-    print(input_filepath)
-
-    doc0 = docx.Document(input_filepath)  # Creating word reader object.
-    text0 = ""
-    fullText = []
-    for para in doc0.paragraphs:
-        fullText.append(para.text)
-        text0 = '\n'.join(fullText)
-
-    # creates an input object corpus by extracting the keyword in the n_gram_range
     corpus = keybert_extractor(text0, 3, 5, 10000)
     #of 3 and 5 gives it as input to the match_query function.
     return corpus
 
 
-def match_query_21(input_filepath, query_all):
+def match_query_21(text0, query_all):#this function is the main one and is called such that all the other functions are called
 
-    corpus = corpus_generator(input_filepath)
+    corpus = corpus_generator(text0)
     query = query_parser(query_all)
     lst_ = []
     category_individual = []
@@ -130,6 +120,9 @@ def match_query_21(input_filepath, query_all):
 
     cosine_sim = sum(score_lst)/len(lth)
 
+
+#     print(category_individual)
+
     if cosine_sim.item() <= 0.35:
         risk = 'Low'
     elif cosine_sim.item() > 0.35 and cosine_sim.item() <= 0.6:
@@ -141,11 +134,13 @@ def match_query_21(input_filepath, query_all):
 
     print('\n')
     print("The Content of PII/Sensitive Data is:", risk)#the variable risk contains our tag to be given to our data so return risk
-    return input_filepath, cosine_sim.item(), risk
+    print("The cosine_sim of the item is:",cosine_sim.item())#this score and print just for reference
+    return cosine_sim.item(), risk
     
 
 query_all1 = "credit card AND bank account AND social security AND license AND email AND aadhar AND uid AND pan AND government of India AND passsport AND income tax AND property papers AND debit card AND transaction AND insurance AND ifsc AND SSN AND address AND law AND legal AND minority AND caste AND reserved category AND postal address AND medical records AND identification AND date of birth AND ip address AND health AND authority AND organization AND data protection AND admission"
 
-match_query_21(
-    "C:\\Users\\adity\\Downloads\\DPO-template-appointment-letter.docx",query_all1)
+#call match_query_21 and dont remove query_all1
+
+
 
