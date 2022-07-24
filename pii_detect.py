@@ -1,3 +1,12 @@
+# pip install --user -U nltk
+# pip install python-docx
+# pip install keybert
+# pip install torch
+# pip install sentence-transformers
+# path for csv file which contains keywords to validate sensetive and pii data stored on your local machine
+
+
+
 from IPython.core.display import TextDisplayObject
 import pandas as pd
 import docx
@@ -13,34 +22,27 @@ bert = KeyBERT()
 
 embedder = SentenceTransformer('all-MiniLM-L6-v2')
 
-df = pd.read_csv("/content/tk.csv",
-                 sep=',', engine='python')  # enter the path of the tags file manually
-# print(df)
-
-dict_risk_cats_ = {}
-for i in range(len(df)):
-    key = df['Tags'][i]
-    vals = (df['Keywords'][i].split(','))
-
-    dict_risk_cats_[key] = vals
-print(dict_risk_cats_)
-
-text = """Supervised learning is the machine learning task of learning a function that maps an input to an output based on example input-output pairs. It infers a function
-It infers a function rom labeled training data consisting of a set of training examples.[2] In supervised learning, each example is a pair consisting of an input object 
-(typically a vector) and a desired output value (also called the supervisory signal)."""
-
 
 class piidata:
     text = ""
-    query_all = ""
+    query_all = "credit card AND bank account AND social security AND license AND email AND aadhar AND uid AND pan AND government of India AND passsport AND income tax AND property papers AND debit card AND transaction AND insurance AND ifsc AND SSN AND address AND law AND legal AND minority AND caste AND reserved category AND postal address AND medical records AND identification AND date of birth AND ip address AND health AND authority AND organization AND data protection AND admission"
 
-    def __init__(self, t, q):
+    def __init__(self, t):
         self.text = t
-        self.query_all = q
 
-        # defining a function which checks the cosine similarity between the legend:keywords and the
-
+    # defining a function which checks the cosine similarity between the legend:keywords and the
     def cosine_sim_check(self, actual_word):
+
+        df = pd.read_csv("/content/tk.csv",
+                         sep=',', engine='python')  # enter the path of the tags file manually
+        # print(df)
+
+        dict_risk_cats_ = {}
+        for i in range(len(df)):
+            key = df['Tags'][i]
+            vals = (df['Keywords'][i].split(','))
+            dict_risk_cats_[key] = vals
+        # print(dict_risk_cats_)
         # corpus of words generated.
         actual_word = actual_word
         actual_word_emb = embedder.encode(actual_word, convert_to_tensor=True)
@@ -153,8 +155,8 @@ class piidata:
 # query_all = "credit card AND bank account AND social security AND license AND email AND aadhar AND uid AND pan AND government of India AND passsport AND income tax AND property papers AND debit card AND transaction AND insurance AND ifsc AND SSN AND address AND law AND legal AND minority AND caste AND reserved category AND postal address AND medical records AND identification AND date of birth AND ip address AND health AND authority AND organization AND data protection AND admission"
 if __name__ == "__main__":
     text = "Supervised learning is the machine learning task of learning a function that maps an input to an output based on example input-output pairs. It infers a function It infers a function rom labeled training data consisting of a set of training examples.[2] In supervised learning, each example is a pair consisting of an input object  (typically a vector) and a desired output value (also called the supervisory signal)."
-    query_all = "credit card AND bank account AND social security AND license AND email AND aadhar AND uid AND pan AND government of India AND passsport AND income tax AND property papers AND debit card AND transaction AND insurance AND ifsc AND SSN AND address AND law AND legal AND minority AND caste AND reserved category AND postal address AND medical records AND identification AND date of birth AND ip address AND health AND authority AND organization AND data protection AND admission"
-    c = piidata(text, query_all)
+
+    c = piidata(text)
     a, b = c.match_query_21()
     print(a)
     print(b)
