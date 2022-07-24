@@ -6,7 +6,6 @@
 # path for csv file which contains keywords to validate sensetive and pii data stored on your local machine
 
 
-
 from IPython.core.display import TextDisplayObject
 import pandas as pd
 import docx
@@ -25,17 +24,17 @@ embedder = SentenceTransformer('all-MiniLM-L6-v2')
 
 class piidata:
     text = ""
+    path = ""
     query_all = "credit card AND bank account AND social security AND license AND email AND aadhar AND uid AND pan AND government of India AND passsport AND income tax AND property papers AND debit card AND transaction AND insurance AND ifsc AND SSN AND address AND law AND legal AND minority AND caste AND reserved category AND postal address AND medical records AND identification AND date of birth AND ip address AND health AND authority AND organization AND data protection AND admission"
 
-    def __init__(self, t):
+    def __init__(self, t, p):
         self.text = t
+        self.path = p
 
     # defining a function which checks the cosine similarity between the legend:keywords and the
     def cosine_sim_check(self, actual_word):
 
-        df = pd.read_csv("/content/tk.csv",
-                         sep=',', engine='python')  # enter the path of the tags file manually
-        # print(df)
+        df = pd.read_csv(self.path, sep=',', engine='python')  # enter the path of the tags file manually
 
         dict_risk_cats_ = {}
         for i in range(len(df)):
