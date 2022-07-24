@@ -14,34 +14,47 @@ model.setInputScale(1.0/127.5)
 model.setInputMean(127.5)
 model.setInputSwapRB(True)
 
-cap = cv2.VideoCapture(r"C:\Users\dell\Desktop\machine learning\Object Detection\icv.mp4")
+class image_classifier:
+    def __init__(self,p):
+        self.path = p
+    
+        
+    def classify(self):
+        tags=""
+        cap = cv2.VideoCapture(self.path)
 
-if not cap.isOpened():
-    cap = cv2.VideoCapture(0) 
-if not cap.isOpened():
-    raise IOError("Cannot open video")
+        if not cap.isOpened():
+            cap = cv2.VideoCapture(0) 
+        if not cap.isOpened():
+            raise IOError("Cannot open video")
 
-font_scale = 3
-font = cv2.FONT_HERSHEY_SIMPLEX
+        font_scale = 3
+        font = cv2.FONT_HERSHEY_SIMPLEX
 
-while True:
-    ret,frame = cap.read()
+        while True:
+            ret,frame = cap.read()
 
-    ClassIndex, confidence, bbox = model.detect(frame,confThreshold=0.55)
+            ClassIndex, confidence, bbox = model.detect(frame,confThreshold=0.55)
 
-    print(ClassIndex)
-    if (len(ClassIndex)!=0):
-        for ClassInd, conf, boxes in zip(ClassIndex.flatten(), confidence.flatten(), bbox):
+#             print(ClassIndex)
+            if (len(ClassIndex)!=0):
+                for ClassInd, conf, boxes in zip(ClassIndex.flatten(), confidence.flatten(), bbox):
+                    if(ClassInd<=80):
+                        cv2.rectangle(frame,boxes,(255, 0, 0), 2 )
+                        cv2.putText(frame,classLabels[ClassInd-1],(boxes[0]+10,boxes[1]+40), font, fontScale=font_scale,color=(0,255,0),thickness=3)
+
+            cv2.imshow('Object Detection Tutorial', frame)
+            if cv2.waitKey(2) & 0xFF == ord('q'):
+                break
+        cap.release()
+        cv2.destroyAllWindows()
+
+        for ClassInd, conf, boxes in zip(set(ClassIndex.flatten()), confidence.flatten(), bbox):
             if(ClassInd<=80):
-                cv2.rectangle(frame,boxes,(255, 0, 0), 2 )
-                cv2.putText(frame,classLabels[ClassInd-1],(boxes[0]+10,boxes[1]+40), font, fontScale=font_scale,color=(0,255,0),thickness=3)
+                tags = classLabels[ClassInd-1]
+                print((classLabels[ClassInd-1]))
+        return tags
 
-    cv2.imshow('Object Detection Tutorial', frame)
-    if cv2.waitKey(2) & 0xFF == ord('q'):
-        break
-cap.release()
-cv2.destroyAllWindows()
-
-for ClassInd, conf, boxes in zip(set(ClassIndex.flatten()), confidence.flatten(), bbox):
-    if(ClassInd<=80):
-        print((classLabels[ClassInd-1]))
+# if __name__ == "__main__":
+#     c=image_classifier(r"C:\Users\dell\Desktop\machine learning\Object Detection\icv.mp4")
+#     c.classify()
