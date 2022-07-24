@@ -19,7 +19,7 @@ class fileConverter:
             for para in doc.paragraphs:
                 fullText.append(para.text)
                 text = '\n'.join(fullText)
-                print(text)
+            print(text)
         elif self.path.endswith(".pdf"):
             pdfFileObj = open(self.path, 'rb')
             pdfReader = PyPDF2.PdfFileReader(pdfFileObj, strict=False)
