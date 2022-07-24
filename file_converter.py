@@ -6,6 +6,8 @@ import os
 import pandas as pd
 import PyPDF2
 
+
+
 class fileConverter:
     path = ""
     tesseractFilePath=""
