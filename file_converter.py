@@ -32,9 +32,13 @@ class fileConverter:
         elif self.path.endswith(".pdf"):
             pdfFileObj = open(self.path, 'rb')
             pdfReader = PyPDF2.PdfFileReader(pdfFileObj, strict=False)
-            pageObj = pdfReader.getPage(0)
-            text = pageObj.extract_text()
-            #print(text)
+            text=""
+            y = pdfReader.numPages
+            for x in range(0,y):
+               pageObj = pdfReader.getPage(x)
+               text=text+pageObj.extract_text()
+               x=x+1
+            print(text)
         elif self.path.endswith(".csv"):
             df1 = pd.read_csv(self.path)
             text = df1.to_string()
