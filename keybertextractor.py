@@ -6,9 +6,7 @@ import pandas as pd
 
 
 class keybertextracter:
-    text="""Supervised learning is the machine learning task of learning a function that maps an input to an output based on example input-output pairs. It infers a function
-     It infers a function rom labeled training data consisting of a set of training examples.[2] In supervised learning, each example is a pair consisting of an input object 
-     (typically a vector) and a desired output value (also called the supervisory signal). """
+    text=""
 
     def __init__(self,t):
         text=t
