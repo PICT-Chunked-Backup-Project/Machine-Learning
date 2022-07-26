@@ -26,9 +26,11 @@ class fileConverter:
                 text = '\n'.join(fullText)
                 print(text)
         elif self.path.endswith(".txt"):
-            with open(self.path,encoding='utf-8') as f:
-                text=f.readlines()
-            print(text)
+           with open(self.path,encoding='utf-8') as f:
+                text1=f.readlines()
+            text=""
+            for i in text1:
+                text+=i
         elif self.path.endswith(".pdf"):
             pdfFileObj = open(self.path, 'rb')
             pdfReader = PyPDF2.PdfFileReader(pdfFileObj, strict=False)
